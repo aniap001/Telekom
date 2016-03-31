@@ -15,7 +15,7 @@ namespace Zadanie1
 
         static void Main(string[] args)
         {
-            int a = 300;
+            //int a = 300;
 
             //            BitArray B = new BitArray(Convert.ToByte(a));   //Testy
             //            Console.WriteLine(B.Length);
@@ -29,19 +29,10 @@ namespace Zadanie1
             //Console.WriteLine("Wprowadz wiadomosc: ");
             //COS POKOMBINOWALAM ALE Z TEGO CO MOWISZ TO NIE WIEM CZY TO DOBRZE... BO JEDNAK CHYBA W INNY SPOSOB TRZEBA TE BAJTY ZAPISAC DO PLIKU
             //ODEBRANIE WIADOMOSCI Z PLIKU odebrana.txt I UMIESZCZENIE BAJTOW W TABLICY 
-            System.IO.StreamReader file = new System.IO.StreamReader(@"odebrana.txt");
-            string mojaWiadomosc = file.ReadLine();
-            Byte[] wiadomoscBajty = System.Text.Encoding.ASCII.GetBytes(mojaWiadomosc);
+            Byte[] wiadomoscBajty = File.ReadAllBytes("mojaWiadomosc.txt");
+            byte[] zaszyfrowanaBjaty = funkcje.szyfrowanieWiadomosci(wiadomoscBajty);
 
-
-            //petla do operowania na wszystkich bajtach przeslanej wiadomosci
-            BitArray jedenBajt;
-            for (int i = 0; i < wiadomoscBajty.Length; i++)
-            {
-                jedenBajt = new BitArray(wiadomoscBajty[i]);
-                Console.WriteLine(wiadomoscBajty[i]);
-            }
-            File.WriteAllBytes("wyslana.txt", funkcje.szyfrowanieWiadomosci(wiadomoscBajty));
+            File.WriteAllBytes("wyslana.txt", zaszyfrowanaBjaty);
 
 
 

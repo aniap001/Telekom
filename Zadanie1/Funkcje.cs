@@ -7,7 +7,7 @@ using System.Collections;
 
 namespace Zadanie1
 {
-    class Funkcje
+    public class Funkcje
     {
         public Funkcje()
         {
@@ -17,6 +17,12 @@ namespace Zadanie1
         {
 
 
+        }
+        byte[] BitArrayToByteArray(BitArray bits) // metoda konwertujaca BitArray na byte[]
+        {
+            byte[] ret = new byte[(bits.Length - 1) / 8 + 1];
+            bits.CopyTo(ret, 0);
+            return ret;
         }
         static int wiersze = 8, kolumny = 16; // parametry macierzy H
 
@@ -32,24 +38,24 @@ namespace Zadanie1
 
         public Byte[] szyfrowanieWiadomosci(Byte[] wiadomoscBajty)
         {
-            BitArray jedenBajt;
+            BitArray bity;
             BitArray T = new BitArray(kolumny);
+            byte[] zaszyfrowanaBajty = new byte[wiadomoscBajty.Length * 2];
+            byte[] dwaBajty = new byte[2];
             for (int i = 0; i < wiadomoscBajty.Length; i++)
             {
-                jedenBajt = new BitArray(wiadomoscBajty[i]);            //tworzona  tablica BitArray przechowujaca bity przeslanej wiadomosci (polowa tablicy T)
-                T = mnozMacierzTH(jedenBajt);                           //tworzenie macierzy T (pelna, zawiera bity kontrolne)
+                bity = new BitArray(wiadomoscBajty[i]);            //tworzona  tablica BitArray przechowujaca bity przeslanej wiadomosci (polowa tablicy T)
+
+                T = mnozMacierzTH(bity);                           //tworzenie macierzy T (pelna, zawiera bity kontrolne)
+                dwaBajty = BitArrayToByteArray(T);
+                Array.Copy(dwaBajty, 0, zaszyfrowanaBajty, i * 2, 2);
+
             }
-
-
-            //zaimplementowac "szyfrowanie"
-
-            //T.CopyTo(wiadomoscBajty, 0);
-            return wiadomoscBajty;
+            return zaszyfrowanaBajty;
         }
 
 
-        //  dodane 31-03 ->jak przeczytasz to skasuj - zebys wiedzial co pozmieniane ;)
-        BitArray mnozMacierzTH(BitArray T)
+        public BitArray mnozMacierzTH(BitArray T)
         {
             BitArray mWynikowa = T;
 
