@@ -15,10 +15,10 @@ namespace Zadanie1
         }
         public Funkcje(int m1, int n1) // na razie nie uzywane
         {
-            
+
 
         }
-        static int wiersze = 8, kolumny = 16; // tymczasowe parametry macierzy H
+        static int wiersze = 8, kolumny = 16; // parametry macierzy H
 
         Boolean[,] H = new Boolean[8, 16] {
                 { true, true, true,false,false, true, true, true,  true,false,false,false,false,false,false,false},
@@ -33,15 +33,17 @@ namespace Zadanie1
         public Byte[] szyfrowanieWiadomosci(Byte[] wiadomoscBajty)
         {
             BitArray jedenBajt;
-            for(int i = 0; i < wiadomoscBajty.Length; i++)
+            BitArray T = new BitArray(kolumny);
+            for (int i = 0; i < wiadomoscBajty.Length; i++)
             {
-                jedenBajt = new BitArray(wiadomoscBajty[i]);
+                jedenBajt = new BitArray(wiadomoscBajty[i]);            //tworzona  tablica BitArray przechowujaca bity przeslanej wiadomosci (polowa tablicy T)
+                T = mnozMacierzTH(jedenBajt);                           //tworzenie macierzy T (pelna, zawiera bity kontrolne)
             }
 
 
             //zaimplementowac "szyfrowanie"
 
-       //     wiadomoscBity.CopyTo(wiadomoscBajty, 0);
+            //T.CopyTo(wiadomoscBajty, 0);
             return wiadomoscBajty;
         }
 
@@ -50,18 +52,18 @@ namespace Zadanie1
         BitArray mnozMacierzTH(BitArray T)
         {
             BitArray mWynikowa = T;
-            
-            for (int i = 0; i<wiersze; i++)
+
+            for (int i = 0; i < wiersze; i++)
             {
                 Boolean wartosc = false;
-                for (int j=0; j < kolumny; j++)
+                for (int j = 0; j < kolumny; j++)
                 {
                     wartosc = T[i] ^ H[i, j];       //dodawanie logiczne
                     mWynikowa[i] = wartosc ^ mWynikowa[i];
                 }
             }
 
-            for(int i=wiersze, j=0; i<kolumny; j++, i++)
+            for (int i = wiersze, j = 0; i < kolumny; j++, i++)
             {
                 T[i] = mWynikowa[j];
             }
