@@ -13,11 +13,7 @@ namespace Zadanie1
         {
 
         }
-        public Funkcje(int m1, int n1) // na razie nie uzywane
-        {
 
-
-        }
         byte[] BitArrayToByteArray(BitArray bits) // metoda konwertujaca BitArray na byte[]
         {
             byte[] ret = new byte[(bits.Length - 1) / 8 + 1];
@@ -42,9 +38,12 @@ namespace Zadanie1
             BitArray T = new BitArray(kolumny);
             byte[] zaszyfrowanaBajty = new byte[wiadomoscBajty.Length * 2];
             byte[] dwaBajty = new byte[2];
+            byte[] bajt = new byte[1];
             for (int i = 0; i < wiadomoscBajty.Length; i++)
             {
-                bity = new BitArray(wiadomoscBajty[i]);            //tworzona  tablica BitArray przechowujaca bity przeslanej wiadomosci (polowa tablicy T)
+                bajt[0] = wiadomoscBajty[i];
+                //Console.WriteLine(bajt[0]);
+                bity = new BitArray(bajt);            //tworzona  tablica BitArray przechowujaca bity przeslanej wiadomosci (polowa tablicy T)
 
                 T = mnozMacierzTH(bity);                           //tworzenie macierzy T (pelna, zawiera bity kontrolne)
                 dwaBajty = BitArrayToByteArray(T);
@@ -55,25 +54,27 @@ namespace Zadanie1
         }
 
 
-        public BitArray mnozMacierzTH(BitArray T)
+        public BitArray mnozMacierzTH(BitArray A)
         {
-            BitArray mWynikowa = T;
-
-            for (int i = 0; i < wiersze; i++)
+            //for(int i = 0; i < A.Length; i++)
+            //{
+            //    Console.Write(A[i]);
+            //}
+            BitArray T = new BitArray(kolumny);
+            for(int i = 0; i < wiersze; i++)               //Wypelnianie macierzy T liczbami a1, a2, ... a8
             {
-                Boolean wartosc = false;
-                for (int j = 0; j < kolumny; j++)
+                T[i] = A[i];
+            }
+            for(int i =0; i < wiersze; i++)                //Wypelnianie macierzy T liczbami c1, c2, ... c8
+            {
+                bool ci = H[i, 0] & A[0];
+                for(int j = 1; j < A.Length; j++)
                 {
-                    wartosc = T[i] ^ H[i, j];       //dodawanie logiczne
-                    mWynikowa[i] = wartosc ^ mWynikowa[i];
+                    ci = ci ^ (H[i, j] & A[j]);
                 }
+                T[8 + i] = ci;
             }
-
-            for (int i = wiersze, j = 0; i < kolumny; j++, i++)
-            {
-                T[i] = mWynikowa[j];
-            }
-            return mWynikowa;       //zwracana BitArray T ktora ma 8 bitow wiadomosci i 8 bitow kontrolnych
+            return T;       //zwracana BitArray T ktora ma 8 bitow wiadomosci i 8 bitow kontrolnych
         }
         //-------------------------------------------------------------------------------
 
