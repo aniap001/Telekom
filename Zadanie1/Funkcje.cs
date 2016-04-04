@@ -91,29 +91,43 @@ namespace Zadanie1
             byte[] dwaBajty = new byte[2];
             byte[] bajt = new byte[1];
             BitArray R; //odebrana wiadomosc zaszyfrowana
-            BitArray E;// wektor bledow wiadomosci  = new BitArray(kolumny);
+            //BitArray E;// wektor bledow wiadomosci  = new BitArray(kolumny);
             for (int i = 0; i < wiadomoscBajty.Length; i += 2)
             {
                 //tablica dwaBajty przechowuje odebrana wiadomosc
                 dwaBajty[0] = wiadomoscBajty[i];
                 dwaBajty[1] = wiadomoscBajty[i+1];
                 R = new BitArray(dwaBajty);
-                //wyswietlanieBitArray(R);
 
                 //odtwarzam stara tablice T przechowujaca stara wiadomosc
                 dwaBajty[0] = zaszyfrowanaBajtyStare[i];
                 dwaBajty[1] = zaszyfrowanaBajtyStare[i+1];
                 Tstare = new BitArray(dwaBajty);
-                //wyswietlanieBitArray(Tstare);
 
-                bool czyDobra = sprawdzWiadomosc(R);
+                BitArray poszukiwanaKolumna = new BitArray(wiersze);
+                poszukiwanaKolumna = mnozMacierzEH(R);
 
+                poprawBledy(poszukiwanaKolumna);
+                /*E = new BitArray(sprawdzWiadomosc(R));
+                if (czyEmaBledy(E))
+                {
+                    BitArray poprawionaWiadomosc = new BitArray(kolumny);
+                    poprawionaWiadomosc = korekcjaBledow(E);
+                }*/
                 //korekcjaBledow(R);
             }
             return zaszyfrowanaBajty;
         }
 
-        public bool sprawdzWiadomosc(BitArray R)
+        public BitArray poprawBledy(BitArray poszukiwanaKolumna)
+        {
+            BitArray poprawionaWiadomosc = new BitArray(wiersze);
+
+
+            return poprawionaWiadomosc;
+        }
+        /*
+        public BitArray sprawdzWiadomosc(BitArray R)
         {
             BitArray E = new BitArray(kolumny);
             for(int i = 0; i < kolumny; i++)
@@ -127,11 +141,91 @@ namespace Zadanie1
                 {
                     //wiadomosc nie jest poprawna
                     Console.WriteLine("Odczytana wiadomosc zawiera przeklamania");
-                    return false;
                 }
             }
             Console.WriteLine("Odczytana wiadomosc nie zawiera przeklaman");
-            return true;
+            return E;
+        }*/
+        /*
+        public BitArray mnozMacierzRH(BitArray R)
+        {
+            BitArray poszukiwanaKolumna = new BitArray(wiersze);
+            poszukiwanaKolumna = mnozMacierzEH(R);
+            return poszukiwanaKolumna;
+        }
+        */
+
+
+
+        /*
+        public BitArray korekcjaBledow(BitArray E)
+        {
+            BitArray poprawionaWiadomosc = new BitArray(wiersze);
+            BitArray poszukiwanaKolumna;
+            int nrKolumnyBlad;
+
+            poszukiwanaKolumna = mnozMacierzEH(E);
+            //szukam numeru kolumny macierzy H ktora bedzie identyczna do otrzymanej poszukiwanej kolumny
+            nrKolumnyBlad = szukajNrKolumny(poszukiwanaKolumna);
+            Console.WriteLine("Wyszukano numer kolumny: " + nrKolumnyBlad);
+            return poprawionaWiadomosc;
+        }
+        */
+       
+        public BitArray mnozMacierzEH(BitArray E)
+        {
+            BitArray poszukiwanaKolumna = new BitArray(wiersze);
+            for(int i=0; i<wiersze; i++)
+            {
+                bool c = H[i, 0] & E[0];
+                for (int j=0; j<kolumny; j++)
+                {
+                    c = c ^ (H[i, j] & E[j]);
+                }
+                poszukiwanaKolumna[i] = c;
+            }
+            return poszukiwanaKolumna;
+        }
+        /*
+        public int szukajNrKolumny(BitArray poszukiwanaKolumna)
+        {
+            bool takieSame = true;
+            for(int j=0; j<kolumny; j++)
+            {
+                takieSame = true;
+                for(int i=0; i<wiersze; i++)
+                {
+                    if (H[i, j] != poszukiwanaKolumna[j])
+                    {
+                        takieSame = false;
+                    }
+                    if (takieSame == true)
+                    {
+                        return j;
+                    }
+                }
+            }
+            Console.WriteLine("Dlugosc poszukiwanej kolumny" + poszukiwanaKolumna.Length);
+            return 55;
+        }
+        */
+
+
+
+
+
+
+
+        public bool czyEmaBledy(BitArray E)
+        {
+            for (int i = 0; i < E.Length; i++)
+            {
+                if (E[i] == true)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public void wyswietlanieBitArray(BitArray tab)
