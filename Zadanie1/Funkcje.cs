@@ -13,6 +13,9 @@ namespace Zadanie1
         {
 
         }
+        //BitArray T;
+        BitArray Tstare;
+        BitArray Tnowe;
 
         byte[] BitArrayToByteArray(BitArray bits) // metoda konwertujaca BitArray na byte[]
         {
@@ -74,9 +77,30 @@ namespace Zadanie1
                 }
                 T[8 + i] = ci;
             }
+            Tstare = new BitArray(T);
             return T;       //zwracana BitArray T ktora ma 8 bitow wiadomosci i 8 bitow kontrolnych
         }
-        //-------------------------------------------------------------------------------
 
+        public Byte[] odszyfrowanieWiadomosci(Byte[] wiadomoscBajty)
+        {
+            byte[] zaszyfrowanaBajty = new byte[wiadomoscBajty.Length / 2];
+            byte[] dwaBajty = new byte[2];
+            byte[] bajt = new byte[1];
+            BitArray R; //odebrana wiadomosc zaszyfrowana
+            BitArray E;// wektor bledow wiadomosci  = new BitArray(kolumny);
+            for (int i = 0; i < wiadomoscBajty.Length; i += 2)
+            {
+                //tablica dwaBajty przechowuje odebrana wiadomosc
+                dwaBajty[0] = wiadomoscBajty[i];
+                dwaBajty[1] = wiadomoscBajty[i+1];
+
+                R = new BitArray(dwaBajty);
+
+                //bool czyDobra = sprawdzWiadomosc(R);
+
+                //korekcjaBledow(R);
+            }
+            return zaszyfrowanaBajty;
+        }
     }
 }

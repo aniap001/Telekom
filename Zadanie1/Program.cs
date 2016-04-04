@@ -44,6 +44,7 @@ namespace Zadanie1
             Byte[] odebranaWiadomoscBity = File.ReadAllBytes("wyslana.txt");
             //zaimplementowac sprawdzanie wiadomosci
             string odebranaWiadomosc = System.Text.Encoding.ASCII.GetString(odebranaWiadomoscBity);
+            byte[] odszyfrowanaWiadomosc = funkcje.odszyfrowanieWiadomosci(odebranaWiadomoscBity);
             Console.WriteLine("Odebrana wiadomosc to: " + odebranaWiadomosc);
             Console.Read();
             Console.Read();
