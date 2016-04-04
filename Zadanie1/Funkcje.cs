@@ -122,7 +122,22 @@ namespace Zadanie1
         public BitArray poprawBledy(BitArray poszukiwanaKolumna)
         {
             BitArray poprawionaWiadomosc = new BitArray(wiersze);
-
+            bool takieSame = true;
+            for (int j = 0; j < kolumny; j++)
+            {
+                takieSame = true;
+                for (int i = 0; i < wiersze; i++)
+                {
+                    if (H[i, j] != poszukiwanaKolumna[j])
+                    {
+                        takieSame = false;
+                    }
+                    if (takieSame == true)
+                    {
+                        return j;
+                    }
+                }
+            }
 
             return poprawionaWiadomosc;
         }
