@@ -15,7 +15,8 @@ namespace Zadanie1
         }
         //BitArray T;
         BitArray Tstare;
-        BitArray Tnowe;
+        //BitArray Tnowe;
+        byte[] zaszyfrowanaBajtyStare;
 
         byte[] BitArrayToByteArray(BitArray bits) // metoda konwertujaca BitArray na byte[]
         {
@@ -49,10 +50,14 @@ namespace Zadanie1
                 bity = new BitArray(bajt);            //tworzona  tablica BitArray przechowujaca bity przeslanej wiadomosci (polowa tablicy T)
 
                 T = mnozMacierzTH(bity);                           //tworzenie macierzy T (pelna, zawiera bity kontrolne)
+                wyswietlanieBitArray(T); //zeby wiedziec jak jest zakodowane
                 dwaBajty = BitArrayToByteArray(T);
                 Array.Copy(dwaBajty, 0, zaszyfrowanaBajty, i * 2, 2);
 
             }
+            //chcemy zachowac zaszyfrowana tablice przed modyfikacja pliku
+            zaszyfrowanaBajtyStare = new byte[kolumny];
+            zaszyfrowanaBajtyStare = zaszyfrowanaBajty;
             return zaszyfrowanaBajty;
         }
 
@@ -77,7 +82,6 @@ namespace Zadanie1
                 }
                 T[8 + i] = ci;
             }
-            Tstare = new BitArray(T);
             return T;       //zwracana BitArray T ktora ma 8 bitow wiadomosci i 8 bitow kontrolnych
         }
 
@@ -93,14 +97,58 @@ namespace Zadanie1
                 //tablica dwaBajty przechowuje odebrana wiadomosc
                 dwaBajty[0] = wiadomoscBajty[i];
                 dwaBajty[1] = wiadomoscBajty[i+1];
-
                 R = new BitArray(dwaBajty);
+                //wyswietlanieBitArray(R);
 
-                //bool czyDobra = sprawdzWiadomosc(R);
+                //odtwarzam stara tablice T przechowujaca stara wiadomosc
+                dwaBajty[0] = zaszyfrowanaBajtyStare[i];
+                dwaBajty[1] = zaszyfrowanaBajtyStare[i+1];
+                Tstare = new BitArray(dwaBajty);
+                //wyswietlanieBitArray(Tstare);
+
+                bool czyDobra = sprawdzWiadomosc(R);
 
                 //korekcjaBledow(R);
             }
             return zaszyfrowanaBajty;
+        }
+
+        public bool sprawdzWiadomosc(BitArray R)
+        {
+            BitArray E = new BitArray(kolumny);
+            for(int i = 0; i < kolumny; i++)
+            {
+                //dodawanie/odejmowanie macierzy z wiadomoscia stara i nowa - gdy jest roznica, pojawi sie true w macierzy E
+                E[i] = R[i] ^ Tstare[i];
+            }
+            for (int i = 0; i < kolumny; i++)
+            {
+                if (E[i]==true)
+                {
+                    //wiadomosc nie jest poprawna
+                    Console.WriteLine("Odczytana wiadomosc zawiera przeklamania");
+                    return false;
+                }
+            }
+            Console.WriteLine("Odczytana wiadomosc nie zawiera przeklaman");
+            return true;
+        }
+
+        public void wyswietlanieBitArray(BitArray tab)
+        {
+            Console.WriteLine("Tablica bitow:");
+            for(int i=0; i<tab.Length; i++)
+            {
+                if(tab[i]==true)
+                {
+                    Console.Write("1");
+                }
+                else
+                {
+                    Console.Write("0");
+                }
+            }
+            Console.WriteLine();
         }
     }
 }
